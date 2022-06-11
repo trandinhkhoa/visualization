@@ -16,25 +16,36 @@ export class AppComponent implements OnInit {
     let colors = chart.data.datasets[0].backgroundColor;
     let swapped;
     let timeout = 0;
+    let countdown = 0;
     do {
       swapped = false;
-      for (let i = 0; i < data.length; i++) {
+      for (let i = 0; i < data.length - countdown; i++) {
         if (data[i] > data[i + 1]) {
           this.swap(labels, i);
           this.swap(data, i);
           // this.swap(colors, i);
           colors[i] = '#3366E6';
           colors[i+1] = '#3366E6';
-          timeout += 5;
+          timeout += 100;
           this.updateChartDelayed(chart, labels.slice(0), data.slice(0), colors.slice(0), timeout);
-          timeout += 10;
+          timeout += 100;
           swapped = true;
           colors[i] = '#FFB399';
           colors[i+1] = '#FFB399';
           this.updateChartDelayed(chart, labels.slice(0), data.slice(0), colors.slice(0), timeout);
         }
       }
+      colors[data.length - countdown - 1] = '#baeb34';
+      countdown++;
     } while (swapped);
+
+    setTimeout(() => {
+      for (let i = 0; i < data.length - countdown; i++) {
+        colors[i] = '#baeb34';
+        chart.data.datasets[0].backgroundColor = colors;
+      }
+      chart.update('none')
+    }, timeout);
   }
 
   swap(arr: number[], i: number): void {
