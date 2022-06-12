@@ -91,7 +91,13 @@ export class AppComponent implements OnInit {
         }]
       },
       options: {
-        animations: false
+        animations: false,
+        plugins: {
+          legend: {
+              display: false,
+          }
+      }
+        // maintainAspectRatio: false
       }
     });
     this.bubbleSort(myChart);
