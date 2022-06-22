@@ -6,11 +6,15 @@
 <!-- * * * * * * * * * * End of Placeholder * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
-<div class="chartContainer">
-  <canvas id="myChart"></canvas>
-</div>
-<button *ngIf="!isSorting" (click)="sort()">Sort</button>
-<button *ngIf="isSorting" (click)="stop()">Stop</button>
-<button (click)="generate()">Generate Array</button>
 
-<router-outlet></router-outlet>
+<div>
+  <nav class="navbar navbar-expand">
+    <a href="" class="navbar-brand">Visualizer</a>
+    <div class="nav-item">
+      <a routerLink="sort" class="nav-link">Sort Algorithms</a>
+    </div>
+  </nav>
+  <div>
+    <router-outlet></router-outlet>
+  </div>
+</div>
