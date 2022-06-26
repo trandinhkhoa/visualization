@@ -3,3 +3,27 @@
   height: 600px;
   margin-bottom: 20px;
 }
+
+.selectArrow {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid;
+  margin: 0 4px;
+}
+
+.selectAlgoButton {
+  background-color: blueviolet;
+  color: white;
+  width: 120px;
+}
+
+.example-flex-container {
+  margin-left: 30px;
+  width: 320px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}

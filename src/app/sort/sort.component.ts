@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 
 // 1st method
 // declare let Chart: any;
@@ -13,6 +13,10 @@ export class SortComponent implements OnInit {
   chart: any;
   timeoutArray : number[] = [];
   isSorting: boolean = false;
+  sortAlgorithm: string = 'Bubble Sort';
+
+  constructor(private elementRef: ElementRef) {
+  }
 
   bubbleSort(chart: any): void {
     this.isSorting = true;
@@ -97,7 +101,10 @@ export class SortComponent implements OnInit {
     for (let i = 0; i < this.timeoutArray.length; i++) {
       clearTimeout(this.timeoutArray[i]);
     }
+  }
 
+  selectAlgo(algo: string): void {
+    this.sortAlgorithm = algo;
   }
 
   ngOnInit(): void {
@@ -113,8 +120,11 @@ export class SortComponent implements OnInit {
     //   this.config
     // );
 
+    // TODO: wrap chart-js by ng2-chart https://www.digitalocean.com/community/tutorials/angular-chartjs-ng2-charts
     // https://stackoverflow.com/questions/64485771/visualising-bubble-sort-using-chart-js
-    let myChart = new (<any>window).Chart('myChart', {
+    // https://stackoverflow.com/questions/41280857/chart-js-failed-to-create-chart-cant-acquire-context-from-the-given-item
+    let htmlRef = this.elementRef.nativeElement.querySelector(`#myChart`);
+    let myChart = new (<any>window).Chart(htmlRef, {
       type: 'bar',
       data: {
         labels: [...this.labels],

@@ -1,17 +1,27 @@
 <div class="chartContainer">
   <canvas id="myChart"></canvas>
 </div>
-<button type="button" class="btn btn-primary" *ngIf="!isSorting" (click)="sort()">Sort</button>
-<button type="button" class="btn btn-danger" *ngIf="isSorting" (click)="stop()">Stop</button>
-<button type="button" class="btn btn-success" (click)="generate()">Generate Array</button>
+<div class="example-flex-container">
+  <button mat-flat-button color="primary" *ngIf="!isSorting" (click)="sort()">Sort</button>
+  <button mat-flat-button color="warn" *ngIf="isSorting" (click)="stop()">Stop</button>
+  <button mat-flat-button color="accent"  (click)="generate()">Generate Array</button>
 
-<div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-    Bubble Sort
+  <!-- <div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+      Bubble Sort
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+      <li><a class="dropdown-item" href="#">Action</a></li>
+      <li><a class="dropdown-item" href="#">Another action</a></li>
+      <li><a class="dropdown-item" href="#">Something else here</a></li>
+    </ul>
+  </div> -->
+  <button mat-flat-button class="selectAlgoButton" [matMenuTriggerFor]="menu">
+    {{ this.sortAlgorithm }}
+    <div class="selectArrow"></div>
   </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-    <li><a class="dropdown-item" href="#">Action</a></li>
-    <li><a class="dropdown-item" href="#">Another action</a></li>
-    <li><a class="dropdown-item" href="#">Something else here</a></li>
-  </ul>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="selectAlgo('Bubble Sort')">Bubble Sort</button>
+    <button mat-menu-item (click)="selectAlgo('Quick Sort')">Quick Sort</button>
+  </mat-menu>
 </div>

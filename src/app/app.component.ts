@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SortComponent } from './sort/sort.component';
 
 @Component({
   selector: 'app-root',
