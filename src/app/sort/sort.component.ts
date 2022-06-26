@@ -29,17 +29,25 @@ export class SortComponent implements OnInit {
     let countdown = 0;
     do {
       swapped = false;
-      for (let i = 0; i < data.length - countdown; i++) {
+      for (let i = 0; i < data.length - countdown - 1; i++) {
         if (data[i] > data[i + 1]) {
           this.swap(labels, i);
           this.swap(data, i);
-          // this.swap(colors, i);
           colors[i] = '#3366E6';
           colors[i+1] = '#3366E6';
           timeout += 30;
           this.updateChartDelayed(chart, labels.slice(0), data.slice(0), colors.slice(0), timeout);
           timeout += 30;
           swapped = true;
+          colors[i] = '#FFB399';
+          colors[i+1] = '#FFB399';
+          this.updateChartDelayed(chart, labels.slice(0), data.slice(0), colors.slice(0), timeout);
+        } else {
+          colors[i] = '#3366E6';
+          colors[i+1] = '#3366E6';
+          timeout += 30;
+          this.updateChartDelayed(chart, labels.slice(0), data.slice(0), colors.slice(0), timeout);
+          timeout += 30;
           colors[i] = '#FFB399';
           colors[i+1] = '#FFB399';
           this.updateChartDelayed(chart, labels.slice(0), data.slice(0), colors.slice(0), timeout);
@@ -89,7 +97,6 @@ export class SortComponent implements OnInit {
     this.stop();
     // https://stackoverflow.com/questions/7486085/copy-array-by-value
     this.chart.data.labels = [...this.labels];
-    console.log("HELLO this.chart.data.labels = ", this.chart.data.labels);
     this.chart.data.datasets[0].data = this.labels.map(() => Math.random());
     this.chart.data.datasets[0].backgroundColor = Array(26).fill('#FFB399');
     this.chart.update('none');
