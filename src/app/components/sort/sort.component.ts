@@ -1,4 +1,5 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
+import { SortService } from 'src/app/services/sort.service';
 
 // 1st method
 // declare let Chart: any;
@@ -17,7 +18,7 @@ export class SortComponent implements OnInit {
   distanceFromTheEnd = 0;
   currentCursor = 0;
 
-  constructor(private elementRef: ElementRef) {
+  constructor(private elementRef: ElementRef, private sortService: SortService) {
   }
 
   bubbleSort(chart: any): void {
@@ -33,8 +34,7 @@ export class SortComponent implements OnInit {
       swapped = false;
       for (let i = 0; i < data.length - countdown - this.distanceFromTheEnd - 1; i++) {
         if (data[i] > data[i + 1]) {
-          // this.swap(labels, i);
-          this.swap(data, i);
+          [data[i], data[i + 1]] = [data[i + 1], data[i]];
           colors[i] = '#3366E6';
           colors[i+1] = '#3366E6';
           timeout += 10;
@@ -78,12 +78,6 @@ export class SortComponent implements OnInit {
     );
   }
 
-  swap(arr: number[], i: number): void {
-    let tmp = arr[i];
-    arr[i] = arr[i + 1];
-    arr[i + 1] = tmp;
-  }
-
   updateChartDelayed(chart: any, labels: string[], data:[], colors: string[], timeout: number, cursor: number) {
     this.timeoutArray.push(
       window.setTimeout(() => {
@@ -100,7 +94,12 @@ export class SortComponent implements OnInit {
   labels = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26];
 
   sort(): void {
-    this.bubbleSort(this.chart);
+    if (this.sortAlgorithm == "Bubble Sort") {
+      this.bubbleSort(this.chart);
+    } else {
+      this.sortService.sort(this.sortAlgorithm, this.chart.data.datasets[0].data);
+      this.chart.update('none');
+    }
   }
 
   generate(): void {

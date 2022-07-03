@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SortComponent } from './sort/sort.component';
+import { SortComponent } from './components/sort/sort.component';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'sort' },
