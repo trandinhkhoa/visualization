@@ -12,125 +12,79 @@ import { BubbleSortService } from 'src/app/services/bubble-sort.service';
 })
 export class SortComponent implements OnInit {
   // https://stackoverflow.com/questions/64485771/visualising-bubble-sort-using-chart-js
+  distanceFromTheEnd = 0;
+  currentCursor = 0;
+
   chart: any;
   timeoutArray : number[] = [];
   isSorting: boolean = false;
   sortAlgorithm: string = 'Bubble Sort';
-  distanceFromTheEnd = 0;
-  currentCursor = 0;
+  animationArray: any[] = [];
 
   constructor(private elementRef: ElementRef,
               private quickSortService: QuickSortService,
               private bubbleSortService: BubbleSortService) {
   }
 
-  bubbleSort(chart: any): void {
-    this.isSorting = true;
-
-    let labels = chart.data.labels;
-    let data = chart.data.datasets[0].data;
-    let colors = chart.data.datasets[0].backgroundColor;
-    let swapped;
-    let timeout = 0;
-    let countdown = 0;
-    do {
-      swapped = false;
-      for (let i = 0; i < data.length - countdown - this.distanceFromTheEnd - 1; i++) {
-        if (data[i] > data[i + 1]) {
-          [data[i], data[i + 1]] = [data[i + 1], data[i]];
-          colors[i] = '#3366E6';
-          colors[i+1] = '#3366E6';
-          timeout += 10;
-          this.updateChartDelayed(chart, labels.slice(0), data.slice(0), colors.slice(0), timeout, i);
-          timeout += 10;
-          swapped = true;
-          colors[i] = '#FFB399';
-          colors[i+1] = '#FFB399';
-          this.updateChartDelayed(chart, labels.slice(0), data.slice(0), colors.slice(0), timeout, i);
-        } else {
-          colors[i] = '#3366E6';
-          colors[i+1] = '#3366E6';
-          timeout += 10;
-          this.updateChartDelayed(chart, labels.slice(0), data.slice(0), colors.slice(0), timeout, i);
-          timeout += 10;
-          colors[i] = '#FFB399';
-          colors[i+1] = '#FFB399';
-          this.updateChartDelayed(chart, labels.slice(0), data.slice(0), colors.slice(0), timeout, i);
-        }
-      }
-      colors[data.length - countdown - this.distanceFromTheEnd - 1] = '#baeb34';
-      countdown++;
-      this.timeoutArray.push(
-        window.setTimeout(() => {
-          this.distanceFromTheEnd++;
-          chart.data.datasets[0].backgroundColor = colors;
-          chart.update('none');
-        }, timeout)
-      );
-    } while (swapped);
-
-    this.timeoutArray.push(
-      window.setTimeout(() => {
-        for (let i = 0; i < data.length - countdown; i++) {
-          colors[i] = '#baeb34';
-          chart.data.datasets[0].backgroundColor = colors;
-        }
-        chart.update('none');
-        this.isSorting = false;
-      }, timeout)
-    );
-  }
-
-  updateChartDelayed(chart: any, labels: string[], data:[], colors: string[], timeout: number, cursor: number) {
-    this.timeoutArray.push(
-      window.setTimeout(() => {
-        this.currentCursor = cursor;
-        chart.data.labels = labels;
-        chart.data.datasets[0].data = data;
-        chart.data.datasets[0].backgroundColor = colors;
-        chart.update('none');
-      }, timeout)
-    );
-  }
-
-  // labels = ['0','1','2','3','V','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
   labels = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26];
 
   sort(): void {
+    this.isSorting = true;
     if (this.sortAlgorithm == "Bubble Sort") {
-      this.bubbleSort(this.chart);
+      this.bubbleSortService.bubbleSort(this.chart.data.datasets[0].data, this.animationArray);
     } else {
       this.quickSortService.quickSort(this.chart.data.datasets[0].data, 0, this.chart.data.datasets[0].data.length - 1);
-      this.chart.update('none');
     }
+    this.playAnimation(this.animationArray);
   }
 
-  generate(): void {
-    this.distanceFromTheEnd = 0;
-    console.log('generating');
-    this.stop();
-    // https://stackoverflow.com/questions/7486085/copy-array-by-value
-    this.chart.data.labels = [...this.labels];
-    this.chart.data.datasets[0].data = this.labels.map(() => Math.random());
-    this.chart.data.datasets[0].backgroundColor = Array(26).fill('#FFB399');
-    this.chart.update('none');
+  playAnimation(array: any[]) {
+    let colors = this.chart.data.datasets[0].backgroundColor;
+    let timeout = 0;
+
+    let isLast = false;
+    for (let i = 0; i < array.length; i++) {
+      let animation = array[i];
+      // load all positions that need highlighting during this animation
+      for (let j = 0; j < animation.highlights.length; j++) {
+        colors[animation.highlights[j].index] = animation.highlights[j].color;
+      }
+      timeout += 10;
+      isLast = (i == array.length - 1) ? true : false;
+      this.update(animation.data.slice(0), colors.slice(0), isLast, timeout);
+    }
+  };
+
+  update(data: any[], color: any[], isLast: boolean, timeout: number) {
+    this.timeoutArray.push(
+      window.setTimeout(() => {
+        this.chart.data.datasets[0].backgroundColor = color;
+        this.chart.data.datasets[0].data = data;
+        this.isSorting = isLast ? false : true;
+        this.chart.update('none');
+      }, timeout)
+    );
+  }
+
+  selectAlgo(algo: string): void {
+    this.sortAlgorithm = algo;
   }
 
   stop(): void {
     this.isSorting = false;
-    for (let i = 0; i < this.chart.data.datasets[0].data.length - this.distanceFromTheEnd - 1; i++) {
-      this.chart.data.datasets[0].backgroundColor[i]= '#FFB399';
-    }
-    this.chart.data.datasets[0].backgroundColor[this.currentCursor]= '#3366E6';
-    this.chart.data.datasets[0].backgroundColor[this.currentCursor + 1]= '#3366E6';
-    this.chart.update('none');
     for (let i = 0; i < this.timeoutArray.length; i++) {
       clearTimeout(this.timeoutArray[i]);
     }
   }
 
-  selectAlgo(algo: string): void {
-    this.sortAlgorithm = algo;
+  generate(): void {
+    this.stop();
+    this.animationArray.length = 0;
+    // https://stackoverflow.com/questions/7486085/copy-array-by-value
+    this.chart.data.labels = [...this.labels];
+    this.chart.data.datasets[0].data = this.labels.map(() => Math.random());
+    this.chart.data.datasets[0].backgroundColor = Array(27).fill('#FFB399');
+    this.chart.update('none');
   }
 
   ngOnInit(): void {
