@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
-import { SortService } from 'src/app/services/sort.service';
+import { QuickSortService } from 'src/app/services/quick-sort.service';
+import { BubbleSortService } from 'src/app/services/bubble-sort.service';
 
 // 1st method
 // declare let Chart: any;
@@ -18,7 +19,9 @@ export class SortComponent implements OnInit {
   distanceFromTheEnd = 0;
   currentCursor = 0;
 
-  constructor(private elementRef: ElementRef, private sortService: SortService) {
+  constructor(private elementRef: ElementRef,
+              private quickSortService: QuickSortService,
+              private bubbleSortService: BubbleSortService) {
   }
 
   bubbleSort(chart: any): void {
@@ -97,7 +100,7 @@ export class SortComponent implements OnInit {
     if (this.sortAlgorithm == "Bubble Sort") {
       this.bubbleSort(this.chart);
     } else {
-      this.sortService.sort(this.sortAlgorithm, this.chart.data.datasets[0].data);
+      this.quickSortService.quickSort(this.chart.data.datasets[0].data, 0, this.chart.data.datasets[0].data.length - 1);
       this.chart.update('none');
     }
   }
