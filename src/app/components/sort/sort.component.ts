@@ -18,8 +18,10 @@ export class SortComponent implements OnInit {
   chart: any;
   timeoutArray : number[] = [];
   isSorting: boolean = false;
+  isPaused: boolean = false;
   sortAlgorithm: string = 'Bubble Sort';
   animationArray: any[] = [];
+  speed: number = 10;
 
   constructor(private elementRef: ElementRef,
               private quickSortService: QuickSortService,
@@ -29,35 +31,42 @@ export class SortComponent implements OnInit {
   labels = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26];
 
   sort(): void {
-    this.isSorting = true;
-    if (this.sortAlgorithm == "Bubble Sort") {
-      this.bubbleSortService.bubbleSort(this.chart.data.datasets[0].data, this.animationArray);
+    if (this.isPaused) {
+      // resume
+      this.isPaused = false;
+      this.playAnimation(this.animationArray);
     } else {
-      this.quickSortService.quickSort(this.chart.data.datasets[0].data, 0, this.chart.data.datasets[0].data.length - 1);
+      this.isSorting = true;
+      if (this.sortAlgorithm == "Bubble Sort") {
+        this.bubbleSortService.bubbleSort(this.chart.data.datasets[0].data, this.animationArray);
+      } else {
+        this.quickSortService.quickSort(this.chart.data.datasets[0].data, 0, this.chart.data.datasets[0].data.length - 1);
+      }
+      this.playAnimation(this.animationArray);
     }
-    this.playAnimation(this.animationArray);
   }
 
-  playAnimation(array: any[]) {
+  playAnimation(animationArray: any[]) {
     let colors = this.chart.data.datasets[0].backgroundColor;
     let timeout = 0;
 
     let isLast = false;
-    for (let i = 0; i < array.length; i++) {
-      let animation = array[i];
+    for (let i = 0; i < animationArray.length; i++) {
+      let animation = animationArray[i];
       // load all positions that need highlighting during this animation
       for (let j = 0; j < animation.highlights.length; j++) {
         colors[animation.highlights[j].index] = animation.highlights[j].color;
       }
-      timeout += 10;
-      isLast = (i == array.length - 1) ? true : false;
-      this.update(animation.data.slice(0), colors.slice(0), isLast, timeout);
+      timeout += this.speed;
+      isLast = (i == animationArray.length - 1) ? true : false;
+      this.update(animationArray, animation.data.slice(0), colors.slice(0), isLast, timeout);
     }
   };
 
-  update(data: any[], color: any[], isLast: boolean, timeout: number) {
+  update(animationArray: any[], data: any[], color: any[], isLast: boolean, timeout: number) {
     this.timeoutArray.push(
       window.setTimeout(() => {
+        animationArray.shift();
         this.chart.data.datasets[0].backgroundColor = color;
         this.chart.data.datasets[0].data = data;
         this.isSorting = isLast ? false : true;
@@ -72,6 +81,7 @@ export class SortComponent implements OnInit {
 
   stop(): void {
     this.isSorting = false;
+    this.isPaused = true;
     for (let i = 0; i < this.timeoutArray.length; i++) {
       clearTimeout(this.timeoutArray[i]);
     }
@@ -79,6 +89,7 @@ export class SortComponent implements OnInit {
 
   generate(): void {
     this.stop();
+    this.isPaused = false;
     this.animationArray.length = 0;
     // https://stackoverflow.com/questions/7486085/copy-array-by-value
     this.chart.data.labels = [...this.labels];
