@@ -40,7 +40,7 @@ export class SortComponent implements OnInit {
       if (this.sortAlgorithm == "Bubble Sort") {
         this.bubbleSortService.bubbleSort(this.chart.data.datasets[0].data, this.animationArray);
       } else {
-        this.quickSortService.quickSort(this.chart.data.datasets[0].data, 0, this.chart.data.datasets[0].data.length - 1);
+        this.quickSortService.quickSort(this.chart.data.datasets[0].data, 0, this.chart.data.datasets[0].data.length - 1, this.animationArray);
       }
       this.playAnimation(this.animationArray);
     }
