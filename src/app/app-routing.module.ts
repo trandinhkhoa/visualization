@@ -3,8 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SortComponent } from './components/sort/sort.component';
 
 const routes: Routes = [
-  {path: '', pathMatch: 'full', redirectTo: 'sort' },
-  {path: 'sort', component: SortComponent }
+  {path: '', component: SortComponent }
 ];
 
 @NgModule({
