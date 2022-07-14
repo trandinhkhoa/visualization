@@ -1,6 +1,6 @@
 # Visualization
 
-https://trandinhkhoa.github.io/visualization/
+Check it out at https://trandinhkhoa.github.io/visualization/
 
 - Ref:
   - Deployment https://angular.io/guide/deployment#fallback
