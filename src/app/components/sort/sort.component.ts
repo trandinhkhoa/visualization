@@ -21,7 +21,7 @@ export class SortComponent implements OnInit {
   isPaused: boolean = false;
   sortAlgorithm: string = 'Bubble Sort';
   animationArray: any[] = [];
-  speed: number = 10;
+  speed: number = 30;
 
   constructor(private elementRef: ElementRef,
               private quickSortService: QuickSortService,
