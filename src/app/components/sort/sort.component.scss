@@ -1,7 +1,24 @@
+@import '../../../variables.scss';
+
 .chartContainer {
-  width: 1200px;
-  height: 600px;
   margin-bottom: 20px;
+}
+
+@media screen and (max-width: $medium-screen-size) {
+  .chartContainer {
+    width: calc(100% - 25px);
+    margin-left: auto;
+    margin-right: auto;
+    height: 600px;
+  }
+}
+
+@media screen and (min-width: $medium-screen-size) {
+  .chartContainer {
+    width: 1200px;
+    height: 600px;
+    margin-left: 10px;
+  }
 }
 
 .selectArrow {

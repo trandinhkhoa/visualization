@@ -132,8 +132,8 @@ export class SortComponent implements OnInit {
           legend: {
               display: false,
           }
-      }
-      // maintainAspectRatio: false
+        },
+        maintainAspectRatio: false
       }
     });
     this.chart = myChart;
