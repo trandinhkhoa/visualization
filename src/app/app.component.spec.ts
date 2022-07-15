@@ -2,6 +2,18 @@ import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatToolbarModule } from '@angular/material/toolbar';
+
+
+beforeEach(async () => {
+  await TestBed.configureTestingModule({
+    imports: [MatTabsModule, MatDividerModule, MatToolbarModule],
+    declarations: [AppComponent],
+  }).compileComponents();
+});
+
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
