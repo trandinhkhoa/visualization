@@ -1,6 +1,7 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { QuickSortService } from 'src/app/services/quick-sort.service';
 import { BubbleSortService } from 'src/app/services/bubble-sort.service';
+import { MergeSortService } from 'src/app/services/merge-sort.service';
 
 // 1st method
 // declare let Chart: any;
@@ -21,10 +22,11 @@ export class SortComponent implements OnInit {
   isPaused: boolean = false;
   sortAlgorithm: string = 'Bubble Sort';
   animationArray: any[] = [];
-  speed: number = 30;
+  speed: number = 100;
 
   constructor(private elementRef: ElementRef,
               private quickSortService: QuickSortService,
+              private mergeSortService: MergeSortService,
               private bubbleSortService: BubbleSortService) {
   }
 
@@ -39,9 +41,12 @@ export class SortComponent implements OnInit {
       this.isSorting = true;
       if (this.sortAlgorithm == "Bubble Sort") {
         this.bubbleSortService.bubbleSort(this.chart.data.datasets[0].data, this.animationArray);
-      } else {
+      } else if (this.sortAlgorithm == "Quick Sort") {
         this.quickSortService.quickSort(this.chart.data.datasets[0].data, 0, this.chart.data.datasets[0].data.length - 1, this.animationArray);
+      } else if (this.sortAlgorithm == "Merge Sort") {
+        this.mergeSortService.mergeSort(this.chart.data.datasets[0].data, this.animationArray);
       }
+      console.log("HELLO array = ", {array: this.chart.data.datasets[0].data});
       this.playAnimation(this.animationArray);
     }
   }
@@ -51,6 +56,7 @@ export class SortComponent implements OnInit {
     let timeout = 0;
 
     let isLast = false;
+    console.log("animation array length = ", animationArray.length);
     for (let i = 0; i < animationArray.length; i++) {
       let animation = animationArray[i];
       // load all positions that need highlighting during this animation

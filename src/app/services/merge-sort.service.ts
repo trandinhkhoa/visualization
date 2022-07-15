@@ -5,10 +5,23 @@ import { Injectable } from '@angular/core';
 })
 export class MergeSortService {
 
+  animationArray: any[] = [];
   constructor() { }
 
   mergeSort (array: number[], animationArray: any[]) {
+    this.animationArray = animationArray;
     this.mergeSortHelper(array, 0, array.length - 1);
+
+    let highlightArray = [];
+    for (let i = 0; i < array.length; i++) {
+      highlightArray.push({index: i, color: '#BAEB34'});
+    }
+    this.animationArray.push(
+      {
+        data: array.slice(0),
+        highlights: highlightArray
+      }
+    );
   }
 
   merge(array: number[], low: number, middle: number, high: number) {
@@ -50,9 +63,53 @@ export class MergeSortService {
 
     // split
     let middle = Math.round((high - low + 1)/2) - 1 + low;
+
+    let highlightArray = [];
+    for (let i = low; i <= high; i++) {
+      highlightArray.push({index: i, color: '#3366E6'});
+    }
+    this.animationArray.push(
+      {
+        data: array.slice(0),
+        highlights: highlightArray.slice(0)
+      }
+    );
+
+    highlightArray = [];
+    for (let i = low; i <= high; i++) {
+      highlightArray.push({index: i, color: '#FFB399'});
+    }
+    this.animationArray.push(
+      {
+        data: array.slice(0),
+        highlights: highlightArray.slice(0)
+      }
+    );
     this.mergeSortHelper(array, low, middle);
     this.mergeSortHelper(array, middle + 1, high);
 
     this.merge(array, low, middle, high);
+
+    highlightArray = [];
+    for (let i = low; i <= high; i++) {
+      highlightArray.push({index: i, color: '#3366E6'});
+    }
+    this.animationArray.push(
+      {
+        data: array.slice(0),
+        highlights: highlightArray.slice(0)
+      }
+    );
+
+    highlightArray = [];
+    for (let i = low; i <= high; i++) {
+      highlightArray.push({index: i, color: '#FFB399'});
+    }
+    this.animationArray.push(
+      {
+        data: array.slice(0),
+        highlights: highlightArray.slice(0)
+      }
+    );
   }
 }
