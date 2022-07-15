@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { BubbleSortService } from './bubble-sort.service';
+import { MergeSortService } from './merge-sort.service';
 
-describe('BubbleSortService', () => {
-  let service: BubbleSortService;
+describe('MergeSortService', () => {
+  let service: MergeSortService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(BubbleSortService);
+    service = TestBed.inject(MergeSortService);
   });
 
   it('should be created', () => {
@@ -19,7 +19,7 @@ describe('BubbleSortService', () => {
 
     for (let iter = 0; iter < 100; iter++) {
       let aRandomArray = Array.from({length: 40}, () => Math.floor(Math.random() * 40));
-      service.bubbleSort(aRandomArray, []);
+      service.mergeSort(aRandomArray, []);
 
       for (let i = 0; i < aRandomArray.length - 1; i++) {
         if (aRandomArray[i] > aRandomArray[i + 1]) {
@@ -28,7 +28,6 @@ describe('BubbleSortService', () => {
         }
       }
     }
-
     expect(sorted).toBeTruthy();
   });
 });
